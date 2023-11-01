@@ -3,6 +3,13 @@ variable "cloud_run_account_id" {
   description = "The service account ID. Changing this forces a new service account to be created."
 }
 
+resource "google_project_service" "required_services" {
+  for_each = toset(["artifactregistry.googleapis.com", "secretmanager.googleapis.com", "iamcredentials.googleapis.com", "run.googleapis.com"])
+
+  service            = each.value
+  disable_on_destroy = false
+}
+
 resource "google_service_account" "cloud_run_service_account" {
   account_id = var.cloud_run_account_id
 }
@@ -15,7 +22,7 @@ resource "google_service_account_iam_binding" "cloud_run_service_account_binding
 }
 
 resource "google_project_iam_member" "service_account_membership" {
-  for_each = toset(["roles/artifactregistry.reader", "roles/artifactregistry.writer", "roles/run.developer", "roles/cloudscheduler.admin"])
+  for_each = toset(["roles/artifactregistry.reader", "roles/artifactregistry.writer", "roles/run.admin", "roles/cloudscheduler.admin"])
 
   project = var.project_id
   role    = each.value
