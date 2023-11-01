@@ -33,8 +33,8 @@ provider "google-beta" {
 }
 
 resource "google_project_service" "required_services" {
-  for_each = toset(["artifactregistry.googleapis.com"])
+  for_each = toset(["artifactregistry.googleapis.com", "secretmanager.googleapis.com"])
 
-  service = each.value
+  service            = each.value
   disable_on_destroy = false
 }

@@ -35,7 +35,7 @@ resource "google_artifact_registry_repository" "image_repository" {
     }
   }
 
-  depends_on = [ google_project_service.required_services ]
+  depends_on = [google_project_service.required_services]
 }
 
 resource "random_uuid" "bucket_uuid" {}
