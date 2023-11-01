@@ -31,3 +31,10 @@ provider "google-beta" {
   region  = var.region
   project = var.project_id
 }
+
+resource "google_project_service" "required_services" {
+  for_each = toset(["artifactregistry.googleapis.com"])
+
+  service = each.value
+  disable_on_destroy = false
+}
